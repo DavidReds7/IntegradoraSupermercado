@@ -20,7 +20,8 @@ public class ProductoController {
 
     @GetMapping("/{id}")
     public Producto buscarProductoPorId(@PathVariable Long id) {
-        return productoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado con el ID: " + id));
+        return productoRepository
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Producto no encontrado con el ID: " + id));
     }
 }
