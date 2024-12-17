@@ -20,9 +20,8 @@ public class CajaService {
         return cajaRepository.findAll();
     }
 
-    public void atenderCliente(Long cajaId) {
-        Caja caja = cajaRepository.findById(cajaId)
-                .orElseThrow(() -> new IllegalArgumentException("Caja no encontrada"));
+    public void atenderCliente() {
+        Caja caja = cajaRepository.findById((long) 1).orElseThrow(() -> new IllegalArgumentException("Caja no encontrada"));
         if (!caja.getFilaClientes().isEmpty()) {
             caja.getFilaClientes().remove(0);
             cajaRepository.save(caja);
