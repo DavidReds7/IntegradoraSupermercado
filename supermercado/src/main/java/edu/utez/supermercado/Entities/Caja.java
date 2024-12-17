@@ -14,7 +14,6 @@ public class Caja {
 
     @ElementCollection
     private LinkedList<Long> filaClientes;
-
     
     public Long getId() {
         return id;
