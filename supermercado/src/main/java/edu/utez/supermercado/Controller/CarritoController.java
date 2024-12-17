@@ -4,10 +4,7 @@ import edu.utez.supermercado.Entities.CarritoProducto;
 import edu.utez.supermercado.Repository.CarritoProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 
 @RestController
 @RequestMapping("/carrito")
@@ -66,5 +63,4 @@ public class CarritoController {
             return "No hay eliminaciones previas para deshacer.";
         }
     }
-
 }
