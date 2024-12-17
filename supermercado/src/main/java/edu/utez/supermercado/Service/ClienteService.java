@@ -21,7 +21,7 @@ public class ClienteService {
     }
 
     public Cliente obtenerClientePorId(Long id) {
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
+        return clienteRepository
+        .findById(id).orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
     }
 }
