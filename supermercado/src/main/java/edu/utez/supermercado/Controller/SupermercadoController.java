@@ -32,11 +32,6 @@ public class SupermercadoController {
         for (CarritoProducto item : productosEnCarrito) {
             Producto producto = item.getProducto();
             total+=item.getProducto().getPrecio()*item.getCantidad();
-            if (producto.getStock() < item.getCantidad()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Stock insuficiente para el producto: " + producto.getNombre());
-            }
-            producto.setStock(producto.getStock() - item.getCantidad());
             productoRepository.save(producto);
             carritoProductoRepository.delete(item);
         }

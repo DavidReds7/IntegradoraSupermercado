@@ -10,7 +10,6 @@ public class Producto {
 
     private String nombre;
     private Double precio;
-    private Integer stock;
 
     public Long getId() {
         return id;
@@ -34,13 +33,5 @@ public class Producto {
 
     public void setPrecio(Double precio) {
         this.precio = precio;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-    
-    public void setStock(Integer stock) {
-        this.stock = stock;
     }
 }
