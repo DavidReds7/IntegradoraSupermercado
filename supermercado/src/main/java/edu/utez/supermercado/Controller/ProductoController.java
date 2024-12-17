@@ -1,25 +1,26 @@
 package edu.utez.supermercado.Controller;
 
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.utez.supermercado.Entities.Producto;
-import edu.utez.supermercado.Service.ProductoService;
+import edu.utez.supermercado.Repository.ProductoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/producto")
-
 public class ProductoController {
-     @Autowired
-    private ProductoService productoService;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
     @PostMapping("/agregarProducto")
-    public Producto crearProducto(@RequestParam String nombre){
-        return productoService.crearProducto(nombre);
+    public String agregarProducto(@RequestBody Producto producto) {
+        productoRepository.save(producto);
+        return "Producto agregado con éxito: " + producto.getNombre();
     }
 
+    @GetMapping("/{id}")
+    public Producto buscarProductoPorId(@PathVariable Long id) {
+        return productoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Producto no encontrado con el ID: " + id));
+    }
 }
