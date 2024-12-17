@@ -1,10 +1,6 @@
 package edu.utez.supermercado.Repository;
 
+import edu.utez.supermercado.Entities.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import edu.utez.supermercado.Entities.Producto;
-
-
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
-
-}
+public interface ProductoRepository extends JpaRepository<Producto, Long> {  }
