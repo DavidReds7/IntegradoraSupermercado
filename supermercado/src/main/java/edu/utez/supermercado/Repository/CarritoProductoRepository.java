@@ -7,5 +7,9 @@ import java.util.List;
 
 @Repository
 public interface CarritoProductoRepository extends JpaRepository<CarritoProducto, Long> {
+    
     List<CarritoProducto> findByClienteId(Long clienteId);
+
+    CarritoProducto findByClienteIdAndProductoId(Long clienteId, Long productoId);
 }
+

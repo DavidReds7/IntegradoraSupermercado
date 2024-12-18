@@ -1,30 +1,31 @@
 package edu.utez.supermercado.Service;
 
-import edu.utez.supermercado.Repository.CajaRepository;
-import edu.utez.supermercado.Entities.Caja;
-import org.springframework.beans.factory.annotation.Autowired;
+import edu.utez.supermercado.Entities.Cliente;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 @Service
 public class CajaService {
 
-    @Autowired
-    private CajaRepository cajaRepository;
+    private Queue<Cliente> queue = new LinkedList<>();
 
-    public Caja agregarCaja(Caja caja) {
-        return cajaRepository.save(caja);
+    public String agregarCliente(Cliente cliente) {
+        queue.offer(cliente);
+        return "Cliente " + cliente.getNombre() + " agregado a la cola.";
     }
 
-    public List<Caja> obtenerCajas() {
-        return cajaRepository.findAll();
-    }
-
-    public void atenderCliente() {
-        Caja caja = cajaRepository.findById((long) 1).orElseThrow(() -> new IllegalArgumentException("Caja no encontrada"));
-        if (!caja.getFilaClientes().isEmpty()) {
-            caja.getFilaClientes().remove(0);
-            cajaRepository.save(caja);
+    public String atenderCliente() {
+        Cliente cliente = queue.poll();
+        if (cliente != null) {
+            return "Cliente " + cliente.getNombre() + " atendido.";
+        } else {
+            return "No hay clientes en la cola.";
         }
+    }
+
+    public Queue<Cliente> obtenerFila() {
+        return queue;
     }
 }

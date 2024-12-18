@@ -25,16 +25,23 @@ public class SupermercadoController {
         List<CarritoProducto> productosEnCarrito = carritoProductoRepository.findByClienteId(clienteId);
 
         if (productosEnCarrito.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El carrito está vacío. No se puede procesar la compra.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se puede procesar la compra porque su carrito está vacío.");
+        }
+
+        for (CarritoProducto item : productosEnCarrito) {
+            if (item.getProducto() == null || item.getProducto().getId() == null || item.getCantidad() == 0 || item.getCantidad() <= 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("No se puede procesar la compra porque su carrito esta vacio.");
+            }
         }
 
         Double total = 0.0;
         for (CarritoProducto item : productosEnCarrito) {
             Producto producto = item.getProducto();
-            total+=item.getProducto().getPrecio()*item.getCantidad();
+            total += producto.getPrecio() * item.getCantidad();
             productoRepository.save(producto);
             carritoProductoRepository.delete(item);
         }
-        return ResponseEntity.ok("Compra procesada exitosamente."+"total: "+total);
+        return ResponseEntity.ok("Compra procesada exitosamente. Total: $" + total);
     }
 }

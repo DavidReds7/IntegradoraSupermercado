@@ -1,43 +1,59 @@
 package edu.utez.supermercado.Controller;
 
+import edu.utez.supermercado.Cola;
 import edu.utez.supermercado.Entities.Cliente;
 import edu.utez.supermercado.Repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-
 @RestController
 @RequestMapping("/caja")
 public class CajaController {
+
+    private Cola<Cliente> colaClientes = new Cola<Cliente>(50);
+    private Cola<Cliente> colaClientes2 = new Cola<Cliente>(50);
+
     @Autowired
     private ClienteRepository clienteRepository;
 
-    private  Queue< Optional<Cliente> > queue=new LinkedList<>();
-
     @PostMapping("/agregar")
     public String agregarCliente(@RequestParam Long clienteId) {
-        Optional<Cliente> cliente=clienteRepository.findById(clienteId);
-       
-        queue.offer(cliente);
-        return "Cliente "+cliente.get().getNombre();
+        Cliente cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado"));
+
+        colaClientes.offer(cliente);
+
+        return "Cliente agregado a la cola: " + cliente.getNombre();
     }
 
     @GetMapping("/atender")
-    public Optional<Cliente> atenderCliente(@RequestParam Long cajaId) {
-        Optional<Cliente> cliente=queue.poll();
-       return cliente;
+    public String atenderCliente() {
+        Cliente clienteAtendido = colaClientes.poll();
+
+        if (clienteAtendido != null) {
+            return "Cliente atendido: " + clienteAtendido.getNombre();
+        } else {
+            return "No hay clientes en la cola para atender.";
+        }
     }
 
+    
     @GetMapping("/obtenerFila")
-    public List<Optional<Cliente>> obtenerFila(@RequestParam Long cajaId) {
-        List<Optional<Cliente>> lista=new ArrayList<>();
-        while (!queue.isEmpty()) {
-            lista.add(queue.poll());
+    public String obtenerFila() {
+        if (colaClientes.isEmpty()) {
+            return "La cola está vacía.";
         }
-        for (Optional<Cliente> cliente : lista) {
-            queue.offer(cliente) ;
+
+        String fila = "Clientes en la cola: ";
+        while (!colaClientes.isEmpty()) {
+            colaClientes2.offer(colaClientes.peek());
+            Cliente cliente = colaClientes.poll();
+            fila = fila+(cliente.getNombre())+" ";
         }
-        return lista;
+
+        while (!colaClientes2.isEmpty()) {
+            colaClientes.offer(colaClientes2.poll());
+        }
+        return fila;
     }
 }
